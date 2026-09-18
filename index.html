@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GOROYO CAR WASH DJIBOUTI</title>
+<style>
+body{margin:0;background:#111;color:#fff;font-family:Arial;padding:20px}
+h1,h2{color:#d4af37}
+.card{background:#1d1d1d;padding:18px;margin:15px 0;border-radius:12px}
+input,select,button{width:100%;box-sizing:border-box;padding:13px;margin:6px 0;border-radius:8px;border:0}
+button{background:#d4af37;color:#111;font-weight:bold}
+table{width:100%;border-collapse:collapse}
+td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
+.hide{display:none}
+</style>
+</head>
+<body>
+
+<h1>GOROYO CAR WASH</h1>
+<p>DJIBOUTI • 77 02 05 49</p>
+
+<div id="login" class="card">
+<h2>Connexion</h2>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Mot de passe">
+<button onclick="login()">Connexion</button>
+<p id="msg"></p>
+</div>
+
+<div id="app" class="hide">
+
+<div class="card">
+<h2>Aujourd'hui</h2>
+<div>Voitures: <b id="cars">0</b></div>
+<div>Chiffre d'affaires: <b id="revenue">0 DJF</b></div>
+</div>
+
+<div class="card">
+<h2>Nouveau lavage</h2>
+<input id="plate" placeholder="Plaque">
+<input id="client" placeholder="Client">
+<input id="phone" placeholder="Téléphone">
+
+<select id="service">
+<option value="Bronze">Bronze — 2000 DJF</option>
+<option value="Silver">Silver — 3500 DJF</option>
+<option value="Gold">Gold — 5000 DJF</option>
+</select>
+
+<input id="employee" placeholder="Employé">
+<button onclick="saveWash()">Enregistrer</button>
+</div>
+
+<div class="card">
+<h2>Historique</h2>
+<div style="overflow:auto">
+<table>
+<thead>
+<tr><th>Plaque</th><th>Service</th><th>Prix</th><th>Employé</th></tr>
+</thead>
+<tbody id="history"></tbody>
+</table>
+</div>
+</div>
+
+<button onclick="logout()">Déconnexion</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb=supabase.createClient(
+"https://vrpvtquxhcquonuhrgbi.supabase.co",
+"sb_publishable_DT1QihntiNAw_ogKUy3lZg_UJyCEFtn"
+);
+
+const prices={Bronze:2000,Silver:3500,Gold:5000};
+
+async function login(){
+ const {error}=await sb.auth.signInWithPassword({
+  email:email.value,
+  password:password.value
+ });
+ if(error){msg.textContent=error.message;return;}
+ showApp();
+}
+
+async function logout(){
+ await sb.auth.signOut();
+ location.reload();
+}
+
+async function showApp(){
+ login.classList.add("hide");
+ app.classList.remove("hide");
+ loadWashes();
+}
+
+async function saveWash(){
+ const s=service.value;
+ const {error}=await sb.from("washes").insert({
+  plate:plate.value,
+  client:client.value,
+  phone:phone.value,
+  service:s,
+  price:prices[s],
+  employee:employee.value
+ });
+ if(error){alert(error.message);return;}
+ plate.value="";
+ client.value="";
+ phone.value="";
+ employee.value="";
+ loadWashes();
+}
+
+async function loadWashes(){
+ const {data,error}=await sb.from("washes")
+  .select("*")
+  .order("created_at",{ascending:false})
+  .limit(100);
+
+ if(error){alert(error.message);return;}
+
+ history.innerHTML="";
+ let count=0,total=0;
+ const today=new Date().toDateString();
+
+ data.forEach(w=>{
+  history.innerHTML+=`<tr>
+   <td>${w.plate||""}</td>
+   <td>${w.service||""}</td>
+   <td>${w.price||0} DJF</td>
+   <td>${w.employee||""}</td>
+  </tr>`;
+
+  if(new Date(w.created_at).toDateString()===today){
+   count++;
+   total+=Number(w.price||0);
+  }
+ });
+
+ cars.textContent=count;
+ revenue.textContent=total.toLocaleString()+" DJF";
+}
+
+sb.auth.getSession().then(({data})=>{
+ if(data.session)showApp();
+});
+</script>
+
+</body>
+</html>
