@@ -13,6 +13,7 @@ button{background:#d4af37;color:#111;font-weight:bold}
 table{width:100%;border-collapse:collapse}
 td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 .hide{display:none}
+.stat{margin:8px 0;font-size:18px}
 </style>
 </head>
 <body>
@@ -24,7 +25,7 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 <h2>Connexion</h2>
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Mot de passe">
-<button id="loginBtn" type="button">Connexion</button>
+<button id="loginBtn">Connexion</button>
 <p id="msg"></p>
 </div>
 
@@ -32,8 +33,10 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 
 <div class="card">
 <h2>Aujourd'hui</h2>
-<div>Voitures: <b id="cars">0</b></div>
-<div>Chiffre d'affaires: <b id="revenue">0 DJF</b></div>
+<div class="stat">Voitures: <b id="cars">0</b></div>
+<div class="stat">Chiffre d'affaires: <b id="revenue">0 DJF</b></div>
+<div class="stat">Dépenses: <b id="expensesTotal">0 DJF</b></div>
+<div class="stat">Bénéfice net: <b id="profit">0 DJF</b></div>
 </div>
 
 <div class="card">
@@ -56,7 +59,25 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 <option value="Card">Carte</option>
 </select>
 
-<button id="saveBtn" type="button">Enregistrer</button>
+<button id="saveWashBtn">Enregistrer</button>
+</div>
+
+<div class="card">
+<h2>Ajouter une dépense</h2>
+
+<select id="expenseCategory">
+<option value="Produits">Produits</option>
+<option value="Eau">Eau</option>
+<option value="Electricite">Électricité</option>
+<option value="Salaire">Salaire</option>
+<option value="Loyer">Loyer</option>
+<option value="Autre">Autre</option>
+</select>
+
+<input id="expenseDescription" placeholder="Description">
+<input id="expenseAmount" type="number" min="0" placeholder="Montant DJF">
+
+<button id="saveExpenseBtn">Ajouter la dépense</button>
 </div>
 
 <div class="card">
@@ -76,143 +97,209 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 </div>
 </div>
 
-<button id="logoutBtn" type="button">Déconnexion</button>
+<div class="card">
+<h2>Dépenses récentes</h2>
+<div style="overflow:auto">
+<table>
+<thead>
+<tr>
+<th>Catégorie</th>
+<th>Description</th>
+<th>Montant</th>
+</tr>
+</thead>
+<tbody id="expenseHistory"></tbody>
+</table>
+</div>
+</div>
 
+<button id="logoutBtn">Déconnexion</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-
 const sb=supabase.createClient(
 "https://vrpvtquxhcquonuhrgbi.supabase.co",
 "sb_publishable_DT1QihntiNAw_ogKUy3lZg_UJyCEFtn"
 );
 
 const $=id=>document.getElementById(id);
+const prices={Bronze:2000,Silver:3500,Gold:5000};
 
-const prices={
-Bronze:2000,
-Silver:3500,
-Gold:5000
-};
-
-$("loginBtn").addEventListener("click",doLogin);
-$("saveBtn").addEventListener("click",saveWash);
-$("logoutBtn").addEventListener("click",logout);
+$("loginBtn").onclick=doLogin;
+$("saveWashBtn").onclick=saveWash;
+$("saveExpenseBtn").onclick=saveExpense;
+$("logoutBtn").onclick=logout;
 
 async function doLogin(){
-
-$("msg").textContent="Connexion...";
-
-const {error}=await sb.auth.signInWithPassword({
-email:$("email").value.trim(),
-password:$("password").value
-});
-
-if(error){
-$("msg").textContent=error.message;
-return;
-}
-
-$("msg").textContent="";
-await showApp();
-
+ $("msg").textContent="Connexion...";
+ const {error}=await sb.auth.signInWithPassword({
+  email:$("email").value.trim(),
+  password:$("password").value
+ });
+ if(error){
+  $("msg").textContent=error.message;
+  return;
+ }
+ $("msg").textContent="";
+ showApp();
 }
 
 async function logout(){
-await sb.auth.signOut();
-location.reload();
+ await sb.auth.signOut();
+ location.reload();
 }
 
 async function showApp(){
-$("loginBox").classList.add("hide");
-$("app").classList.remove("hide");
-await loadWashes();
+ $("loginBox").classList.add("hide");
+ $("app").classList.remove("hide");
+ await refreshAll();
+}
+
+async function refreshAll(){
+ await loadWashes();
+ await loadExpenses();
 }
 
 async function saveWash(){
+ const s=$("service").value;
 
-const s=$("service").value;
+ const {error}=await sb.from("washes").insert({
+  plate:$("plate").value.trim(),
+  client:$("client").value.trim(),
+  phone:$("phone").value.trim(),
+  service:s,
+  price:prices[s],
+  employee:$("employee").value.trim(),
+  payment_method:$("payment").value
+ });
 
-const {error}=await sb.from("washes").insert({
-plate:$("plate").value.trim(),
-client:$("client").value.trim(),
-phone:$("phone").value.trim(),
-service:s,
-price:prices[s],
-employee:$("employee").value.trim(),
-payment_method:$("payment").value
-});
+ if(error){
+  alert(error.message);
+  return;
+ }
 
-if(error){
-alert(error.message);
-return;
+ $("plate").value="";
+ $("client").value="";
+ $("phone").value="";
+ $("employee").value="";
+
+ await refreshAll();
 }
 
-$("plate").value="";
-$("client").value="";
-$("phone").value="";
-$("employee").value="";
+async function saveExpense(){
+ const amount=Number($("expenseAmount").value);
 
-await loadWashes();
+ if(!amount || amount<=0){
+  alert("Entrez un montant valide.");
+  return;
+ }
 
+ const {error}=await sb.from("expenses").insert({
+  category:$("expenseCategory").value,
+  description:$("expenseDescription").value.trim(),
+  amount:amount
+ });
+
+ if(error){
+  alert(error.message);
+  return;
+ }
+
+ $("expenseDescription").value="";
+ $("expenseAmount").value="";
+
+ await refreshAll();
+}
+
+let todayRevenue=0;
+let todayExpenses=0;
+
+function updateProfit(){
+ $("profit").textContent=
+ (todayRevenue-todayExpenses).toLocaleString()+" DJF";
 }
 
 async function loadWashes(){
+ const {data,error}=await sb.from("washes")
+  .select("*")
+  .order("created_at",{ascending:false})
+  .limit(100);
 
-const {data,error}=await sb
-.from("washes")
-.select("*")
-.order("created_at",{ascending:false})
-.limit(100);
+ if(error){
+  alert(error.message);
+  return;
+ }
 
-if(error){
-alert(error.message);
-return;
+ $("history").innerHTML="";
+ let count=0;
+ todayRevenue=0;
+ const today=new Date().toDateString();
+
+ (data||[]).forEach(w=>{
+  const tr=document.createElement("tr");
+
+  [w.plate||"",w.service||"",`${w.price||0} DJF`,w.employee||""]
+  .forEach(value=>{
+   const td=document.createElement("td");
+   td.textContent=value;
+   tr.appendChild(td);
+  });
+
+  $("history").appendChild(tr);
+
+  if(new Date(w.created_at).toDateString()===today){
+   count++;
+   todayRevenue+=Number(w.price||0);
+  }
+ });
+
+ $("cars").textContent=count;
+ $("revenue").textContent=todayRevenue.toLocaleString()+" DJF";
+ updateProfit();
 }
 
-$("history").innerHTML="";
+async function loadExpenses(){
+ const {data,error}=await sb.from("expenses")
+  .select("*")
+  .order("created_at",{ascending:false})
+  .limit(100);
 
-let count=0;
-let total=0;
+ if(error){
+  alert(error.message);
+  return;
+ }
 
-const today=new Date().toDateString();
+ $("expenseHistory").innerHTML="";
+ todayExpenses=0;
+ const today=new Date().toDateString();
 
-(data||[]).forEach(w=>{
+ (data||[]).forEach(e=>{
+  const tr=document.createElement("tr");
 
-const tr=document.createElement("tr");
+  [e.category||"",e.description||"",`${e.amount||0} DJF`]
+  .forEach(value=>{
+   const td=document.createElement("td");
+   td.textContent=value;
+   tr.appendChild(td);
+  });
 
-[
-w.plate||"",
-w.service||"",
-`${w.price||0} DJF`,
-w.employee||""
-].forEach(value=>{
+  $("expenseHistory").appendChild(tr);
 
-const td=document.createElement("td");
-td.textContent=value;
-tr.appendChild(td);
+  if(new Date(e.created_at).toDateString()===today){
+   todayExpenses+=Number(e.amount||0);
+  }
+ });
 
-});
+ $("expensesTotal").textContent=
+ todayExpenses.toLocaleString()+" DJF";
 
-$("history").appendChild(tr);
-
-if(new Date(w.created_at).toDateString()===today){
-count++;
-total+=Number(w.price||0);
-}
-
-});
-
-$("cars").textContent=count;
-$("revenue").textContent=total.toLocaleString()+" DJF";
-
+ updateProfit();
 }
 
 sb.auth.getSession().then(({data})=>{
-if(data.session) showApp();
+ if(data.session) showApp();
 });
-
 </script>
 </body>
 </html>
