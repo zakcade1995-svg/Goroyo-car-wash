@@ -4,149 +4,256 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GOROYO CAR WASH DJIBOUTI</title>
+
 <style>
-body{margin:0;background:#111;color:#fff;font-family:Arial;padding:20px}
+body{
+  margin:0;
+  background:#111;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  padding:20px;
+}
 h1,h2{color:#d4af37}
-.card{background:#1d1d1d;padding:18px;margin:15px 0;border-radius:12px}
-input,select,button{width:100%;box-sizing:border-box;padding:13px;margin:6px 0;border-radius:8px;border:0}
-button{background:#d4af37;color:#111;font-weight:bold}
-table{width:100%;border-collapse:collapse}
-td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
+.card{
+  background:#1d1d1d;
+  padding:18px;
+  margin:15px 0;
+  border-radius:12px;
+}
+input,select,button{
+  width:100%;
+  box-sizing:border-box;
+  padding:13px;
+  margin:6px 0;
+  border-radius:8px;
+  border:0;
+}
+button{
+  background:#d4af37;
+  color:#111;
+  font-weight:bold;
+  cursor:pointer;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+td,th{
+  padding:9px;
+  border-bottom:1px solid #444;
+  text-align:left;
+}
 .hide{display:none}
+#msg{color:#ffb4b4}
 </style>
 </head>
+
 <body>
 
 <h1>GOROYO CAR WASH</h1>
 <p>DJIBOUTI • 77 02 05 49</p>
 
-<div id="login" class="card">
-<h2>Connexion</h2>
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Mot de passe">
-<button onclick="doLogin()">Connexion</button>
-<p id="msg"></p>
+<div id="loginBox" class="card">
+  <h2>Connexion</h2>
+
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Mot de passe">
+
+  <button id="loginBtn" type="button">Connexion</button>
+
+  <p id="msg"></p>
 </div>
 
 <div id="app" class="hide">
 
-<div class="card">
-<h2>Aujourd'hui</h2>
-<div>Voitures: <b id="cars">0</b></div>
-<div>Chiffre d'affaires: <b id="revenue">0 DJF</b></div>
-</div>
+  <div class="card">
+    <h2>Aujourd'hui</h2>
+    <div>Voitures: <b id="cars">0</b></div>
+    <div>Chiffre d'affaires: <b id="revenue">0 DJF</b></div>
+  </div>
 
-<div class="card">
-<h2>Nouveau lavage</h2>
-<input id="plate" placeholder="Plaque">
-<input id="client" placeholder="Client">
-<input id="phone" placeholder="Téléphone">
+  <div class="card">
+    <h2>Nouveau lavage</h2>
 
-<select id="service">
-<option value="Bronze">Bronze — 2000 DJF</option>
-<option value="Silver">Silver — 3500 DJF</option>
-<option value="Gold">Gold — 5000 DJF</option>
-</select>
+    <input id="plate" placeholder="Plaque">
+    <input id="client" placeholder="Client">
+    <input id="phone" placeholder="Téléphone">
 
-<input id="employee" placeholder="Employé">
-<button onclick="saveWash()">Enregistrer</button>
-</div>
+    <select id="service">
+      <option value="Bronze">Bronze — 2000 DJF</option>
+      <option value="Silver">Silver — 3500 DJF</option>
+      <option value="Gold">Gold — 5000 DJF</option>
+    </select>
 
-<div class="card">
-<h2>Historique</h2>
-<div style="overflow:auto">
-<table>
-<thead>
-<tr><th>Plaque</th><th>Service</th><th>Prix</th><th>Employé</th></tr>
-</thead>
-<tbody id="history"></tbody>
-</table>
-</div>
-</div>
+    <input id="employee" placeholder="Employé">
 
-<button onclick="logout()">Déconnexion</button>
+    <button id="saveBtn" type="button">Enregistrer</button>
+  </div>
+
+  <div class="card">
+    <h2>Historique</h2>
+
+    <div style="overflow:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Plaque</th>
+            <th>Service</th>
+            <th>Prix</th>
+            <th>Employé</th>
+          </tr>
+        </thead>
+        <tbody id="history"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <button id="logoutBtn" type="button">Déconnexion</button>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const sb=supabase.createClient(
-"https://vrpvtquxhcquonuhrgbi.supabase.co",
-"sb_publishable_DT1QihntiNAw_ogKUy3lZg_UJyCEFtn"
+const $ = (id) => document.getElementById(id);
+
+const sb = supabase.createClient(
+  "https://vrpvtquxhcquonuhrgbi.supabase.co",
+  "sb_publishable_DT1QihntiNAw_ogKUy3lZg_UJyCEFtn"
 );
 
-const prices={Bronze:2000,Silver:3500,Gold:5000};
+const prices = {
+  Bronze: 2000,
+  Silver: 3500,
+  Gold: 5000
+};
 
-async async function doLogin(){
- const {error}=await sb.auth.signInWithPassword({
-  email:email.value,
-  password:password.value
- });
- if(error){msg.textContent=error.message;return;}
- showApp();
-}
+$("loginBtn").addEventListener("click", doLogin);
+$("saveBtn").addEventListener("click", saveWash);
+$("logoutBtn").addEventListener("click", logout);
 
-async function logout(){
- await sb.auth.signOut();
- location.reload();
-}
+async function doLogin() {
+  $("msg").textContent = "Connexion...";
 
-async function showApp(){
- document.getElementById("login").classList.add("hide");
- document.getElementById("app").classList.remove("hide");
- loadWashes();
-}
+  try {
+    const { error } = await sb.auth.signInWithPassword({
+      email: $("email").value.trim(),
+      password: $("password").value
+    });
 
-async function saveWash(){
- const s=service.value;
- const {error}=await sb.from("washes").insert({
-  plate:plate.value,
-  client:client.value,
-  phone:phone.value,
-  service:s,
-  price:prices[s],
-  employee:employee.value
- });
- if(error){alert(error.message);return;}
- plate.value="";
- client.value="";
- phone.value="";
- employee.value="";
- loadWashes();
-}
+    if (error) {
+      $("msg").textContent = error.message;
+      return;
+    }
 
-async function loadWashes(){
- const {data,error}=await sb.from("washes")
-  .select("*")
-  .order("created_at",{ascending:false})
-  .limit(100);
+    $("msg").textContent = "";
+    await showApp();
 
- if(error){alert(error.message);return;}
-
- history.innerHTML="";
- let count=0,total=0;
- const today=new Date().toDateString();
-
- data.forEach(w=>{
-  history.innerHTML+=`<tr>
-   <td>${w.plate||""}</td>
-   <td>${w.service||""}</td>
-   <td>${w.price||0} DJF</td>
-   <td>${w.employee||""}</td>
-  </tr>`;
-
-  if(new Date(w.created_at).toDateString()===today){
-   count++;
-   total+=Number(w.price||0);
+  } catch (error) {
+    $("msg").textContent =
+      error.message || "Erreur de connexion";
   }
- });
-
- cars.textContent=count;
- revenue.textContent=total.toLocaleString()+" DJF";
 }
 
-sb.auth.getSession().then(({data})=>{
- if(data.session)showApp();
-});
+async function logout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+async function showApp() {
+  $("loginBox").classList.add("hide");
+  $("app").classList.remove("hide");
+  await loadWashes();
+}
+
+async function saveWash() {
+  const selectedService = $("service").value;
+
+  const { error } = await sb
+    .from("washes")
+    .insert({
+      plate: $("plate").value.trim(),
+      client: $("client").value.trim(),
+      phone: $("phone").value.trim(),
+      service: selectedService,
+      price: prices[selectedService],
+      employee: $("employee").value.trim()
+    });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  $("plate").value = "";
+  $("client").value = "";
+  $("phone").value = "";
+  $("employee").value = "";
+
+  await loadWashes();
+}
+
+async function loadWashes() {
+  const { data, error } = await sb
+    .from("washes")
+    .select("*")
+    .order("created_at", { ascending:false })
+    .limit(100);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  $("history").innerHTML = "";
+
+  let count = 0;
+  let total = 0;
+
+  const today = new Date().toDateString();
+
+  (data || []).forEach((wash) => {
+
+    const row = document.createElement("tr");
+
+    const values = [
+      wash.plate || "",
+      wash.service || "",
+      (wash.price || 0) + " DJF",
+      wash.employee || ""
+    ];
+
+    values.forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.appendChild(cell);
+    });
+
+    $("history").appendChild(row);
+
+    if (
+      wash.created_at &&
+      new Date(wash.created_at).toDateString() === today
+    ) {
+      count++;
+      total += Number(wash.price || 0);
+    }
+  });
+
+  $("cars").textContent = count;
+  $("revenue").textContent =
+    total.toLocaleString() + " DJF";
+}
+
+async function checkSession() {
+  const { data } = await sb.auth.getSession();
+
+  if (data.session) {
+    await showApp();
+  }
+}
+
+checkSession();
 </script>
 
 </body>
