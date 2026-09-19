@@ -24,7 +24,7 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 <h2>Connexion</h2>
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Mot de passe">
-<button onclick="login()">Connexion</button>
+<button onclick="doLogin()">Connexion</button>
 <p id="msg"></p>
 </div>
 
@@ -76,7 +76,7 @@ const sb=supabase.createClient(
 
 const prices={Bronze:2000,Silver:3500,Gold:5000};
 
-async function login(){
+async async function doLogin(){
  const {error}=await sb.auth.signInWithPassword({
   email:email.value,
   password:password.value
@@ -91,8 +91,8 @@ async function logout(){
 }
 
 async function showApp(){
- login.classList.add("hide");
- app.classList.remove("hide");
+ document.getElementById("login").classList.add("hide");
+ document.getElementById("app").classList.remove("hide");
  loadWashes();
 }
 
