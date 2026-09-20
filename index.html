@@ -119,6 +119,7 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 <div class="stat">Dépenses: <b id="monthExpenses">0 DJF</b></div>
 <div class="stat">Bénéfice net: <b id="monthProfit">0 DJF</b></div>
 </div>
+ <button id="reportBtn" type="button">Télécharger le rapport mensuel</button>
 <button id="logoutBtn">Déconnexion</button>
 </div>
 
@@ -136,7 +137,7 @@ $("loginBtn").onclick=doLogin;
 $("saveWashBtn").onclick=saveWash;
 $("saveExpenseBtn").onclick=saveExpense;
 $("logoutBtn").onclick=logout;
-
+$("reportBtn").onclick=downloadMonthlyReport;
 async function doLogin(){
  $("msg").textContent="Connexion...";
  const {error}=await sb.auth.signInWithPassword({
@@ -328,6 +329,29 @@ loadMonthlyReport();
 sb.auth.getSession().then(({data})=>{
  if(data.session) showApp();
 });
+ async function downloadMonthlyReport(){
+  const now=new Date();
+  const month=now.toLocaleString("fr-FR",{month:"long",year:"numeric"});
+
+  const text=
+`GOROYO CAR WASH DJIBOUTI
+Rapport mensuel: ${month}
+
+Voitures: ${$("monthCars").textContent}
+Chiffre d'affaires: ${$("monthRevenue").textContent}
+Dépenses: ${$("monthExpenses").textContent}
+Bénéfice net: ${$("monthProfit").textContent}
+
+Téléphone: 77 02 05 49`;
+
+  const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="GOROYO-Rapport-Mensuel.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
 </script>
 </body>
 </html>
