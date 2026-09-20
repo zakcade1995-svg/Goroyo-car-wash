@@ -112,7 +112,13 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 </table>
 </div>
 </div>
-
+<div class="card">
+<h2>Rapport mensuel</h2>
+<div class="stat">Voitures ce mois: <b id="monthCars">0</b></div>
+<div class="stat">Chiffre d'affaires: <b id="monthRevenue">0 DJF</b></div>
+<div class="stat">Dépenses: <b id="monthExpenses">0 DJF</b></div>
+<div class="stat">Bénéfice net: <b id="monthProfit">0 DJF</b></div>
+</div>
 <button id="logoutBtn">Déconnexion</button>
 </div>
 
@@ -296,7 +302,29 @@ async function loadExpenses(){
 
  updateProfit();
 }
+async function loadMonthlyReport(){
+  const now=new Date();
+  const start=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
 
+  const {data:washes}=await sb.from("washes")
+    .select("price,created_at")
+    .gte("created_at",start);
+
+  const {data:expenses}=await sb.from("expenses")
+    .select("amount,created_at")
+    .gte("created_at",start);
+
+  const monthCars=(washes||[]).length;
+  const monthRevenue=(washes||[]).reduce((sum,w)=>sum+Number(w.price||0),0);
+  const monthExpenses=(expenses||[]).reduce((sum,e)=>sum+Number(e.amount||0),0);
+
+  $("monthCars").textContent=monthCars;
+  $("monthRevenue").textContent=monthRevenue.toLocaleString()+" DJF";
+  $("monthExpenses").textContent=monthExpenses.toLocaleString()+" DJF";
+  $("monthProfit").textContent=(monthRevenue-monthExpenses).toLocaleString()+" DJF";
+}
+
+loadMonthlyReport();
 sb.auth.getSession().then(({data})=>{
  if(data.session) showApp();
 });
