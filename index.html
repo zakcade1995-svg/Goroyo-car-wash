@@ -126,7 +126,8 @@ td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
 </div>
  <button id="reportBtn" type="button">Télécharger le rapport mensuel</button>
 <button id="logoutBtn">Déconnexion</button>
-</div>
+<div class="stat" style="margin-top:18px"><b>Rapport des employés</b></div>
+<div id="employeeReport">Aucune donnée</div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -313,7 +314,7 @@ async function loadMonthlyReport(){
   const start=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
 
   const {data:washes}=await sb.from("washes")
-    .select("price,created_at")
+  .select("price,employee,created_at")
     .gte("created_at",start);
 
   const {data:expenses}=await sb.from("expenses")
@@ -328,8 +329,14 @@ async function loadMonthlyReport(){
   $("monthRevenue").textContent=monthRevenue.toLocaleString()+" DJF";
   $("monthExpenses").textContent=monthExpenses.toLocaleString()+" DJF";
   $("monthProfit").textContent=(monthRevenue-monthExpenses).toLocaleString()+" DJF";
-}
+const employees=["Employé 1","Employé 2","Employé 3"];
 
+$("employeeReport").innerHTML=employees.map(emp=>{
+  const list=(washes||[]).filter(w=>w.employee===emp);
+  const total=list.reduce((sum,w)=>sum+Number(w.price||0),0);
+  return `<div class="stat">${emp}: <b>${list.length} voitures — ${total.toLocaleString()} DJF</b></div>`;
+}).join("");
+}
 loadMonthlyReport();
 sb.auth.getSession().then(({data})=>{
  if(data.session) showApp();
