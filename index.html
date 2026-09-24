@@ -723,21 +723,32 @@ async function checkSubscription(){
  .classList.remove("hide");
 
 
- $("subscriptionDetails").innerHTML=
+ $("subscriptionDetails").innerHTML = `
+<div class="stat">
+Client:
+<b>${subscription.customer_name || "-"}</b>
+</div>
 
- `<div class="success">
- ${subscription.plan || "Abonnement"}
- </div>
+<div class="stat">
+Plaque:
+<b>${subscription.plate || "-"}</b>
+</div>
 
- <div class="stat">
- Lavages restants:
- <b>${subscription.remaining_washes}</b>
- </div>
+<div class="stat">
+Forfait:
+<b>${subscription.plan || "Abonnement"}</b>
+</div>
 
- <div class="stat">
- Valable jusqu'au:
- <b>${frenchDate(subscription.end_date)}</b>
- </div>`;
+<div class="stat">
+Lavages restants:
+<b>${subscription.remaining_washes ?? 0}</b>
+</div>
+
+<div class="stat">
+Valable jusqu'au:
+<b>${frenchDate(subscription.end_date)}</b>
+</div>
+`;
 
 
  /* Remplissage automatique */
