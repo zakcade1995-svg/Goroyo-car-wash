@@ -4,372 +4,1532 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GOROYO CAR WASH DJIBOUTI</title>
+
 <style>
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;padding:20px}
+body{
+  margin:0;
+  background:#111;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  padding:20px
+}
+
 h1,h2{color:#d4af37}
-.card{background:#1d1d1d;padding:18px;margin:15px 0;border-radius:12px}
-input,select,button{width:100%;box-sizing:border-box;padding:13px;margin:6px 0;border-radius:8px;border:0;font-size:16px}
-button{background:#d4af37;color:#111;font-weight:bold}
-table{width:100%;border-collapse:collapse}
-td,th{padding:9px;border-bottom:1px solid #444;text-align:left}
+
+.card{
+  background:#1d1d1d;
+  padding:18px;
+  margin:15px 0;
+  border-radius:12px
+}
+
+input,select,button{
+  width:100%;
+  box-sizing:border-box;
+  padding:13px;
+  margin:6px 0;
+  border-radius:8px;
+  border:0;
+  font-size:16px
+}
+
+button{
+  background:#d4af37;
+  color:#111;
+  font-weight:bold
+}
+
+table{
+  width:100%;
+  border-collapse:collapse
+}
+
+td,th{
+  padding:9px;
+  border-bottom:1px solid #444;
+  text-align:left
+}
+
 .hide{display:none}
-.stat{margin:8px 0;font-size:18px}
+
+.stat{
+  margin:8px 0;
+  font-size:18px
+}
+
+.subscription-active{
+  border:1px solid #d4af37;
+}
+
+.subscription-info{
+  background:#292929;
+  padding:14px;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+.success{
+  color:#70db70;
+  font-weight:bold;
+}
+
+.warning{
+  color:#ffcc66;
+  font-weight:bold;
+}
 </style>
 </head>
+
 <body>
 
 <h1>GOROYO CAR WASH</h1>
 <p>DJIBOUTI • 77 02 05 49</p>
 
+<!-- CONNEXION -->
+
 <div id="loginBox" class="card">
+
 <h2>Connexion</h2>
+
 <input id="email" type="email" placeholder="Email">
+
 <input id="password" type="password" placeholder="Mot de passe">
+
 <button id="loginBtn">Connexion</button>
+
 <p id="msg"></p>
+
 </div>
+
 
 <div id="app" class="hide">
 
-<div class="card">
-<h2>Aujourd'hui</h2>
-<div class="stat">Voitures: <b id="cars">0</b></div>
-<div class="stat">Chiffre d'affaires: <b id="revenue">0 DJF</b></div>
-<div class="stat">Dépenses: <b id="expensesTotal">0 DJF</b></div>
-<div class="stat">Bénéfice net: <b id="profit">0 DJF</b></div>
-</div>
+<!-- AUJOURD'HUI -->
 
 <div class="card">
+
+<h2>Aujourd'hui</h2>
+
+<div class="stat">
+Voitures:
+<b id="cars">0</b>
+</div>
+
+<div class="stat">
+Chiffre d'affaires:
+<b id="revenue">0 DJF</b>
+</div>
+
+<div class="stat">
+Dépenses:
+<b id="expensesTotal">0 DJF</b>
+</div>
+
+<div class="stat">
+Bénéfice net:
+<b id="profit">0 DJF</b>
+</div>
+
+</div>
+
+
+<!-- NOUVEAU LAVAGE -->
+
+<div class="card">
+
 <h2>Nouveau lavage</h2>
+
 <input id="plate" placeholder="Plaque">
+
 <input id="client" placeholder="Client">
+
 <input id="phone" placeholder="Téléphone">
 
-<select id="service">
-<option value="Bronze">Bronze — 2000 DJF</option>
-<option value="Silver">Silver — 3500 DJF</option>
-<option value="Gold">Gold — 5000 DJF</option>
-</select>
 
-<select id="employee">
-  <option value="">Choisir un employé</option>
-  <option value="Employé 1">Employé 1</option>
-  <option value="Employé 2">Employé 2</option>
-  <option value="Employé 3">Employé 3</option>
-</select>
+<!-- INFORMATION ABONNEMENT -->
 
-<select id="payment">
-<option value="Cash">Espèces</option>
-<option value="Mobile">Mobile Money</option>
-<option value="Card">Carte</option>
-</select>
+<div id="subscriptionStatus" class="subscription-info hide">
 
-<button id="saveWashBtn">Enregistrer</button>
+<div class="stat">
+<b>Abonnement actif</b>
 </div>
 
+<div id="subscriptionDetails"></div>
+
+</div>
+
+
+<select id="service">
+
+<option value="Bronze">
+Bronze — 2000 DJF
+</option>
+
+<option value="Silver">
+Silver — 3500 DJF
+</option>
+
+<option value="Gold">
+Gold — 5000 DJF
+</option>
+
+</select>
+
+
+<select id="employee">
+
+<option value="">
+Choisir un employé
+</option>
+
+<option value="Employé 1">
+Employé 1
+</option>
+
+<option value="Employé 2">
+Employé 2
+</option>
+
+<option value="Employé 3">
+Employé 3
+</option>
+
+</select>
+
+
+<select id="payment">
+
+<option value="Cash">
+Espèces
+</option>
+
+<option value="Mobile">
+Mobile Money
+</option>
+
+<option value="Card">
+Carte
+</option>
+
+</select>
+
+
+<button id="saveWashBtn">
+Enregistrer
+</button>
+
+</div>
+
+
+<!-- ABONNEMENTS -->
+
 <div class="card">
+
+<h2>Abonnements</h2>
+
+<p>
+Les abonnements actifs enregistrés dans la base de données.
+</p>
+
+<div style="overflow:auto">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Plaque</th>
+<th>Client</th>
+<th>Forfait</th>
+<th>Restants</th>
+<th>Expiration</th>
+</tr>
+
+</thead>
+
+<tbody id="subscriptionHistory"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- DEPENSE -->
+
+<div class="card">
+
 <h2>Ajouter une dépense</h2>
 
 <select id="expenseCategory">
+
 <option value="Produits">Produits</option>
+
 <option value="Eau">Eau</option>
-<option value="Electricite">Électricité</option>
-<option value="Salaire">Salaire</option>
-<option value="Loyer">Loyer</option>
-<option value="Autre">Autre</option>
+
+<option value="Electricite">
+Électricité
+</option>
+
+<option value="Salaire">
+Salaire
+</option>
+
+<option value="Loyer">
+Loyer
+</option>
+
+<option value="Autre">
+Autre
+</option>
+
 </select>
 
-<input id="expenseDescription" placeholder="Description">
-<input id="expenseAmount" type="number" min="0" placeholder="Montant DJF">
 
-<button id="saveExpenseBtn">Ajouter la dépense</button>
+<input
+id="expenseDescription"
+placeholder="Description"
+>
+
+<input
+id="expenseAmount"
+type="number"
+min="0"
+placeholder="Montant DJF"
+>
+
+<button id="saveExpenseBtn">
+Ajouter la dépense
+</button>
+
 </div>
 
+
+<!-- HISTORIQUE -->
+
 <div class="card">
+
 <h2>Historique</h2>
+
 <div style="overflow:auto">
+
 <table>
+
 <thead>
+
 <tr>
 <th>Plaque</th>
 <th>Service</th>
 <th>Prix</th>
 <th>Employé</th>
 </tr>
+
 </thead>
+
 <tbody id="history"></tbody>
+
 </table>
-</div>
+
 </div>
 
+</div>
+
+
+<!-- DEPENSES RECENTES -->
+
 <div class="card">
+
 <h2>Dépenses récentes</h2>
+
 <div style="overflow:auto">
+
 <table>
+
 <thead>
+
 <tr>
 <th>Catégorie</th>
 <th>Description</th>
 <th>Montant</th>
 </tr>
+
 </thead>
+
 <tbody id="expenseHistory"></tbody>
+
 </table>
+
 </div>
+
 </div>
+
+
+<!-- RAPPORT MENSUEL -->
+
 <div class="card">
+
 <h2>Rapport mensuel</h2>
-<div class="stat">Voitures ce mois: <b id="monthCars">0</b></div>
-<div class="stat">Chiffre d'affaires: <b id="monthRevenue">0 DJF</b></div>
-<div class="stat">Dépenses: <b id="monthExpenses">0 DJF</b></div>
-<div class="stat">Bénéfice net: <b id="monthProfit">0 DJF</b></div>
+
+<div class="stat">
+Voitures ce mois:
+<b id="monthCars">0</b>
 </div>
- <button id="reportBtn" type="button">Télécharger le rapport mensuel</button>
-<button id="logoutBtn">Déconnexion</button>
-<div class="stat" style="margin-top:18px"><b>Rapport des employés</b></div>
-<div id="employeeReport">Aucune donnée</div></div>
+
+<div class="stat">
+Chiffre d'affaires:
+<b id="monthRevenue">0 DJF</b>
+</div>
+
+<div class="stat">
+Dépenses:
+<b id="monthExpenses">0 DJF</b>
+</div>
+
+<div class="stat">
+Bénéfice net:
+<b id="monthProfit">0 DJF</b>
+</div>
+
+<div
+class="stat"
+style="margin-top:18px"
+>
+<b>Rapport des employés</b>
+</div>
+
+<div id="employeeReport">
+Aucune donnée
+</div>
+
+<button
+id="reportBtn"
+type="button"
+>
+Télécharger le rapport mensuel
+</button>
+
+</div>
+
+
+<!-- RECHERCHE CLIENT -->
+
 <div class="card">
-  <h2>Recherche client / plaque</h2>
-  <input id="searchCustomer" placeholder="Plaque, client ou téléphone">
-  <button id="searchCustomerBtn" type="button">Rechercher</button>
-  <div id="customerResults" style="margin-top:15px"></div>
+
+<h2>Recherche client / plaque</h2>
+
+<input
+id="searchCustomer"
+placeholder="Plaque, client ou téléphone"
+>
+
+<button
+id="searchCustomerBtn"
+type="button"
+>
+Rechercher
+</button>
+
+<div
+id="customerResults"
+style="margin-top:15px"
+></div>
+
 </div>
+
+
+<button id="logoutBtn">
+Déconnexion
+</button>
+
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+
+/* ================================
+   SUPABASE
+================================ */
+
 const sb=supabase.createClient(
 "https://vrpvtquxhcquonuhrgbi.supabase.co",
 "sb_publishable_DT1QihntiNAw_ogKUy3lZg_UJyCEFtn"
 );
 
 const $=id=>document.getElementById(id);
-const prices={Bronze:2000,Silver:3500,Gold:5000};
+
+const prices={
+ Bronze:2000,
+ Silver:3500,
+ Gold:5000
+};
+
+
+/* ================================
+   BOUTONS
+================================ */
 
 $("loginBtn").onclick=doLogin;
+
 $("saveWashBtn").onclick=saveWash;
+
 $("saveExpenseBtn").onclick=saveExpense;
+
 $("logoutBtn").onclick=logout;
+
 $("reportBtn").onclick=downloadMonthlyReport;
+
 $("searchCustomerBtn").onclick=searchCustomer;
-  async function doLogin(){
- $("msg").textContent="Connexion...";
- const {error}=await sb.auth.signInWithPassword({
-  email:$("email").value.trim(),
-  password:$("password").value
- });
- if(error){
-  $("msg").textContent=error.message;
-  return;
- }
- $("msg").textContent="";
- showApp();
+
+
+/* ================================
+   DATE FRANÇAISE
+================================ */
+
+function frenchDate(value){
+
+ if(!value) return "-";
+
+ const date=new Date(value+"T00:00:00");
+
+ return date.toLocaleDateString(
+  "fr-FR",
+  {
+   day:"numeric",
+   month:"long",
+   year:"numeric"
+  }
+ );
+
 }
+
+
+/* ================================
+   PLAQUE
+================================ */
+
+function normalizePlate(value){
+
+ return (value||"")
+ .trim()
+ .toUpperCase()
+ .replace(/\s+/g,"");
+
+}
+
+
+/* ================================
+   LOGIN
+================================ */
+
+async function doLogin(){
+
+ $("msg").textContent="Connexion...";
+
+ const {error}=await sb.auth.signInWithPassword({
+
+  email:$("email").value.trim(),
+
+  password:$("password").value
+
+ });
+
+ if(error){
+
+  $("msg").textContent=error.message;
+
+  return;
+
+ }
+
+ $("msg").textContent="";
+
+ showApp();
+
+}
+
 
 async function logout(){
+
  await sb.auth.signOut();
+
  location.reload();
+
 }
+
 
 async function showApp(){
+
  $("loginBox").classList.add("hide");
+
  $("app").classList.remove("hide");
+
  await refreshAll();
+
 }
+
+
+/* ================================
+   REFRESH
+================================ */
 
 async function refreshAll(){
+
  await loadWashes();
+
  await loadExpenses();
+
+ await loadSubscriptions();
+
+ await loadMonthlyReport();
+
 }
 
-async function saveWash(){
- const s=$("service").value;
 
- const {error}=await sb.from("washes").insert({
-  plate:$("plate").value.trim(),
-  client:$("client").value.trim(),
-  phone:$("phone").value.trim(),
-  service:s,
-  price:prices[s],
-  employee:$("employee").value.trim(),
-  payment_method:$("payment").value
- });
+/* ================================
+   ABONNEMENTS
+================================ */
+
+let currentSubscription=null;
+
+
+async function loadSubscriptions(){
+
+ const {data,error}=await sb
+ .from("subscriptions")
+ .select("*")
+ .order("created_at",{ascending:false});
 
  if(error){
-  alert(error.message);
+
+  console.error(error);
+
   return;
+
  }
 
- $("plate").value="";
- $("client").value="";
- $("phone").value="";
- $("employee").value="";
+ $("subscriptionHistory").innerHTML="";
 
- await refreshAll();
-}
 
-async function saveExpense(){
- const amount=Number($("expenseAmount").value);
+ (data||[]).forEach(sub=>{
 
- if(!amount || amount<=0){
-  alert("Entrez un montant valide.");
-  return;
- }
-
- const {error}=await sb.from("expenses").insert({
-  category:$("expenseCategory").value,
-  description:$("expenseDescription").value.trim(),
-  amount:amount
- });
-
- if(error){
-  alert(error.message);
-  return;
- }
-
- $("expenseDescription").value="";
- $("expenseAmount").value="";
-
- await refreshAll();
-}
-
-let todayRevenue=0;
-let todayExpenses=0;
-
-function updateProfit(){
- $("profit").textContent=
- (todayRevenue-todayExpenses).toLocaleString()+" DJF";
-}
-
-async function loadWashes(){
- const {data,error}=await sb.from("washes")
-  .select("*")
-  .order("created_at",{ascending:false})
-  .limit(100);
-
- if(error){
-  alert(error.message);
-  return;
- }
-
- $("history").innerHTML="";
- let count=0;
- todayRevenue=0;
- const today=new Date().toDateString();
-
- (data||[]).forEach(w=>{
   const tr=document.createElement("tr");
 
-  [w.plate||"",w.service||"",`${w.price||0} DJF`,w.employee||""]
-  .forEach(value=>{
+
+  const values=[
+
+   sub.plate||"",
+
+   sub.customer_name||"",
+
+   sub.plan||"",
+
+   sub.remaining_washes ?? 0,
+
+   frenchDate(sub.end_date)
+
+  ];
+
+
+  values.forEach(value=>{
+
    const td=document.createElement("td");
+
    td.textContent=value;
+
    tr.appendChild(td);
+
   });
+
+
+  $("subscriptionHistory").appendChild(tr);
+
+ });
+
+}
+
+
+/* ================================
+   VERIFIER ABONNEMENT
+================================ */
+
+async function checkSubscription(){
+
+ const plate=normalizePlate(
+  $("plate").value
+ );
+
+ currentSubscription=null;
+
+ $("subscriptionStatus")
+ .classList.add("hide");
+
+
+ if(!plate) return;
+
+
+ const {data,error}=await sb
+ .from("subscriptions")
+ .select("*");
+
+
+ if(error){
+
+  console.error(error);
+
+  return;
+
+ }
+
+
+ const subscription=(data||[]).find(s=>
+
+  normalizePlate(s.plate)===plate &&
+
+  Number(s.remaining_washes)>0
+
+ );
+
+
+ if(!subscription) return;
+
+
+ const today=new Date();
+
+ today.setHours(0,0,0,0);
+
+
+ if(subscription.end_date){
+
+  const end=new Date(
+   subscription.end_date+"T23:59:59"
+  );
+
+  if(end<today){
+
+   return;
+
+  }
+
+ }
+
+
+ currentSubscription=subscription;
+
+
+ $("subscriptionStatus")
+ .classList.remove("hide");
+
+
+ $("subscriptionDetails").innerHTML=
+
+ `<div class="success">
+ ${subscription.plan || "Abonnement"}
+ </div>
+
+ <div class="stat">
+ Lavages restants:
+ <b>${subscription.remaining_washes}</b>
+ </div>
+
+ <div class="stat">
+ Valable jusqu'au:
+ <b>${frenchDate(subscription.end_date)}</b>
+ </div>`;
+
+
+ /* Remplissage automatique */
+
+ if(
+  !$("client").value &&
+  subscription.customer_name
+ ){
+
+  $("client").value=
+  subscription.customer_name;
+
+ }
+
+
+ if(
+  !$("phone").value &&
+  subscription.phone
+ ){
+
+  $("phone").value=
+  subscription.phone;
+
+ }
+
+}
+
+
+/* Vérifier quand la plaque change */
+
+$("plate").addEventListener(
+ "change",
+ checkSubscription
+);
+
+$("plate").addEventListener(
+ "blur",
+ checkSubscription
+);
+
+
+/* ================================
+   ENREGISTRER LAVAGE
+================================ */
+
+async function saveWash(){
+
+ const plate=$("plate").value.trim();
+
+ if(!plate){
+
+  alert("Entrez la plaque.");
+
+  return;
+
+ }
+
+
+ await checkSubscription();
+
+
+ const s=$("service").value;
+
+
+ let washPrice=prices[s];
+
+ let subscriptionId=null;
+
+
+ /*
+ Si abonnement actif:
+ le lavage utilise un crédit
+ et le prix du lavage est 0.
+ */
+
+ if(currentSubscription){
+
+  washPrice=0;
+
+  subscriptionId=currentSubscription.id;
+
+ }
+
+
+ const washData={
+
+  plate:plate,
+
+  client:$("client").value.trim(),
+
+  phone:$("phone").value.trim(),
+
+  service:currentSubscription
+   ? "Abonnement"
+   : s,
+
+  price:washPrice,
+
+  employee:$("employee").value.trim(),
+
+  payment_method:currentSubscription
+   ? "Abonnement"
+   : $("payment").value
+
+ };
+
+
+ const {error}=await sb
+ .from("washes")
+ .insert(washData);
+
+
+ if(error){
+
+  alert(error.message);
+
+  return;
+
+ }
+
+
+ /* RETIRER 1 LAVAGE */
+
+ if(currentSubscription){
+
+  const remaining=
+  Math.max(
+   0,
+   Number(currentSubscription.remaining_washes)-1
+  );
+
+
+  const {error:updateError}=await sb
+  .from("subscriptions")
+  .update({
+   remaining_washes:remaining
+  })
+  .eq("id",subscriptionId);
+
+
+  if(updateError){
+
+   alert(
+    "Le lavage a été enregistré, mais le compteur de l'abonnement n'a pas pu être mis à jour: "+
+    updateError.message
+   );
+
+  }else{
+
+   alert(
+    "Lavage abonnement enregistré. Lavages restants: "+
+    remaining
+   );
+
+  }
+
+ }
+
+
+ $("plate").value="";
+
+ $("client").value="";
+
+ $("phone").value="";
+
+ $("employee").value="";
+
+ currentSubscription=null;
+
+ $("subscriptionStatus")
+ .classList.add("hide");
+
+
+ await refreshAll();
+
+}
+
+
+/* ================================
+   DEPENSE
+================================ */
+
+async function saveExpense(){
+
+ const amount=
+ Number(
+  $("expenseAmount").value
+ );
+
+
+ if(!amount || amount<=0){
+
+  alert(
+   "Entrez un montant valide."
+  );
+
+  return;
+
+ }
+
+
+ const {error}=await sb
+ .from("expenses")
+ .insert({
+
+  category:
+  $("expenseCategory").value,
+
+  description:
+  $("expenseDescription")
+  .value.trim(),
+
+  amount:amount
+
+ });
+
+
+ if(error){
+
+  alert(error.message);
+
+  return;
+
+ }
+
+
+ $("expenseDescription").value="";
+
+ $("expenseAmount").value="";
+
+
+ await refreshAll();
+
+}
+
+
+/* ================================
+   AUJOURD'HUI
+================================ */
+
+let todayRevenue=0;
+
+let todayExpenses=0;
+
+
+function updateProfit(){
+
+ $("profit").textContent=
+
+ (todayRevenue-todayExpenses)
+ .toLocaleString("fr-FR")
+ +" DJF";
+
+}
+
+
+/* ================================
+   LAVAGES
+================================ */
+
+async function loadWashes(){
+
+ const {data,error}=await sb
+ .from("washes")
+ .select("*")
+ .order(
+  "created_at",
+  {ascending:false}
+ )
+ .limit(100);
+
+
+ if(error){
+
+  alert(error.message);
+
+  return;
+
+ }
+
+
+ $("history").innerHTML="";
+
+
+ let count=0;
+
+ todayRevenue=0;
+
+
+ const today=
+ new Date().toDateString();
+
+
+ (data||[]).forEach(w=>{
+
+  const tr=
+  document.createElement("tr");
+
+
+  [
+
+   w.plate||"",
+
+   w.service||"",
+
+   `${Number(w.price||0)
+   .toLocaleString("fr-FR")} DJF`,
+
+   w.employee||""
+
+  ].forEach(value=>{
+
+   const td=
+   document.createElement("td");
+
+   td.textContent=value;
+
+   tr.appendChild(td);
+
+  });
+
 
   $("history").appendChild(tr);
 
-  if(new Date(w.created_at).toDateString()===today){
+
+  if(
+   new Date(w.created_at)
+   .toDateString()===today
+  ){
+
    count++;
-   todayRevenue+=Number(w.price||0);
+
+   todayRevenue+=
+   Number(w.price||0);
+
   }
+
  });
+
 
  $("cars").textContent=count;
- $("revenue").textContent=todayRevenue.toLocaleString()+" DJF";
+
+
+ $("revenue").textContent=
+
+ todayRevenue
+ .toLocaleString("fr-FR")
+ +" DJF";
+
+
  updateProfit();
+
 }
+
+
+/* ================================
+   DEPENSES
+================================ */
 
 async function loadExpenses(){
- const {data,error}=await sb.from("expenses")
-  .select("*")
-  .order("created_at",{ascending:false})
-  .limit(100);
+
+ const {data,error}=await sb
+ .from("expenses")
+ .select("*")
+ .order(
+  "created_at",
+  {ascending:false}
+ )
+ .limit(100);
+
 
  if(error){
+
   alert(error.message);
+
   return;
+
  }
 
- $("expenseHistory").innerHTML="";
+
+ $("expenseHistory")
+ .innerHTML="";
+
+
  todayExpenses=0;
- const today=new Date().toDateString();
+
+
+ const today=
+ new Date().toDateString();
+
 
  (data||[]).forEach(e=>{
-  const tr=document.createElement("tr");
 
-  [e.category||"",e.description||"",`${e.amount||0} DJF`]
-  .forEach(value=>{
-   const td=document.createElement("td");
+  const tr=
+  document.createElement("tr");
+
+
+  [
+
+   e.category||"",
+
+   e.description||"",
+
+   `${Number(e.amount||0)
+   .toLocaleString("fr-FR")} DJF`
+
+  ].forEach(value=>{
+
+   const td=
+   document.createElement("td");
+
    td.textContent=value;
+
    tr.appendChild(td);
+
   });
 
-  $("expenseHistory").appendChild(tr);
 
-  if(new Date(e.created_at).toDateString()===today){
-   todayExpenses+=Number(e.amount||0);
+  $("expenseHistory")
+  .appendChild(tr);
+
+
+  if(
+   new Date(e.created_at)
+   .toDateString()===today
+  ){
+
+   todayExpenses+=
+   Number(e.amount||0);
+
   }
+
  });
 
- $("expensesTotal").textContent=
- todayExpenses.toLocaleString()+" DJF";
+
+ $("expensesTotal")
+ .textContent=
+
+ todayExpenses
+ .toLocaleString("fr-FR")
+ +" DJF";
+
 
  updateProfit();
+
 }
+
+
+/* ================================
+   RAPPORT MENSUEL
+================================ */
+
 async function loadMonthlyReport(){
-  const now=new Date();
-  const start=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
 
-  const {data:washes}=await sb.from("washes")
-  .select("price,employee,created_at")
-    .gte("created_at",start);
+ const now=new Date();
 
-  const {data:expenses}=await sb.from("expenses")
-    .select("amount,created_at")
-    .gte("created_at",start);
 
-  const monthCars=(washes||[]).length;
-  const monthRevenue=(washes||[]).reduce((sum,w)=>sum+Number(w.price||0),0);
-  const monthExpenses=(expenses||[]).reduce((sum,e)=>sum+Number(e.amount||0),0);
+ const start=
+ new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  1
+ ).toISOString();
 
-  $("monthCars").textContent=monthCars;
-  $("monthRevenue").textContent=monthRevenue.toLocaleString()+" DJF";
-  $("monthExpenses").textContent=monthExpenses.toLocaleString()+" DJF";
-  $("monthProfit").textContent=(monthRevenue-monthExpenses).toLocaleString()+" DJF";
-const employees=["Employé 1","Employé 2","Employé 3"];
 
-$("employeeReport").innerHTML=employees.map(emp=>{
-  const list=(washes||[]).filter(w=>w.employee===emp);
-  const total=list.reduce((sum,w)=>sum+Number(w.price||0),0);
-  return `<div class="stat">${emp}: <b>${list.length} voitures — ${total.toLocaleString()} DJF</b></div>`;
-}).join("");
+ const {data:washes}=await sb
+ .from("washes")
+ .select(
+  "price,employee,created_at"
+ )
+ .gte(
+  "created_at",
+  start
+ );
+
+
+ const {data:expenses}=await sb
+ .from("expenses")
+ .select(
+  "amount,created_at"
+ )
+ .gte(
+  "created_at",
+  start
+ );
+
+
+ const monthCars=
+ (washes||[]).length;
+
+
+ const monthRevenue=
+ (washes||[])
+ .reduce(
+  (sum,w)=>
+  sum+Number(w.price||0),
+  0
+ );
+
+
+ const monthExpenses=
+ (expenses||[])
+ .reduce(
+  (sum,e)=>
+  sum+Number(e.amount||0),
+  0
+ );
+
+
+ $("monthCars")
+ .textContent=
+ monthCars;
+
+
+ $("monthRevenue")
+ .textContent=
+ monthRevenue
+ .toLocaleString("fr-FR")
+ +" DJF";
+
+
+ $("monthExpenses")
+ .textContent=
+ monthExpenses
+ .toLocaleString("fr-FR")
+ +" DJF";
+
+
+ $("monthProfit")
+ .textContent=
+
+ (monthRevenue-monthExpenses)
+ .toLocaleString("fr-FR")
+ +" DJF";
+
+
+ const employees=[
+  "Employé 1",
+  "Employé 2",
+  "Employé 3"
+ ];
+
+
+ $("employeeReport")
+ .innerHTML=
+
+ employees.map(emp=>{
+
+  const list=
+  (washes||[])
+  .filter(
+   w=>w.employee===emp
+  );
+
+
+  const total=
+  list.reduce(
+   (sum,w)=>
+   sum+Number(w.price||0),
+   0
+  );
+
+
+  return `
+  <div class="stat">
+
+  ${emp}:
+
+  <b>
+
+  ${list.length} voitures
+  —
+  ${total.toLocaleString("fr-FR")} DJF
+
+  </b>
+
+  </div>
+  `;
+
+ }).join("");
+
 }
-loadMonthlyReport();
-sb.auth.getSession().then(({data})=>{
- if(data.session) showApp();
-});
- async function downloadMonthlyReport(){
-  const now=new Date();
-  const month=now.toLocaleString("fr-FR",{month:"long",year:"numeric"});
 
-  const text=
+
+/* ================================
+   RECHERCHE CLIENT
+================================ */
+
+async function searchCustomer(){
+
+ const query=
+ $("searchCustomer")
+ .value.trim()
+ .toLowerCase();
+
+
+ if(!query){
+
+  $("customerResults")
+  .innerHTML=
+  "Entrez une plaque, un client ou un téléphone.";
+
+  return;
+
+ }
+
+
+ const {data:washes,error}=await sb
+ .from("washes")
+ .select("*")
+ .order(
+  "created_at",
+  {ascending:false}
+ )
+ .limit(500);
+
+
+ if(error){
+
+  $("customerResults")
+  .textContent=
+  error.message;
+
+  return;
+
+ }
+
+
+ const results=
+ (washes||[])
+ .filter(w=>{
+
+  return(
+
+   String(w.plate||"")
+   .toLowerCase()
+   .includes(query)
+
+   ||
+
+   String(w.client||"")
+   .toLowerCase()
+   .includes(query)
+
+   ||
+
+   String(w.phone||"")
+   .toLowerCase()
+   .includes(query)
+
+  );
+
+ });
+
+
+ if(!results.length){
+
+  $("customerResults")
+  .innerHTML=
+  "Aucun résultat.";
+
+  return;
+
+ }
+
+
+ $("customerResults")
+ .innerHTML=
+
+ results.slice(0,20)
+ .map(w=>`
+
+ <div class="subscription-info">
+
+ <b>${w.plate||"-"}</b>
+
+ <br>
+
+ ${w.client||"-"}
+
+ <br>
+
+ ${w.phone||"-"}
+
+ <br>
+
+ ${w.service||"-"}
+ —
+ ${Number(w.price||0)
+ .toLocaleString("fr-FR")} DJF
+
+ </div>
+
+ `).join("");
+
+}
+
+
+/* ================================
+   TELECHARGER RAPPORT
+================================ */
+
+async function downloadMonthlyReport(){
+
+ await loadMonthlyReport();
+
+
+ const now=new Date();
+
+
+ const month=
+ now.toLocaleString(
+  "fr-FR",
+  {
+   month:"long",
+   year:"numeric"
+  }
+ );
+
+
+ const text=
+
 `GOROYO CAR WASH DJIBOUTI
+
 Rapport mensuel: ${month}
 
 Voitures: ${$("monthCars").textContent}
+
 Chiffre d'affaires: ${$("monthRevenue").textContent}
+
 Dépenses: ${$("monthExpenses").textContent}
+
 Bénéfice net: ${$("monthProfit").textContent}
+
+
+Rapport des employés:
+
+${$("employeeReport").innerText}
+
 
 Téléphone: 77 02 05 49`;
 
-  const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="GOROYO-Rapport-Mensuel.txt";
-  a.click();
-  URL.revokeObjectURL(url);
+
+ const blob=
+ new Blob(
+  [text],
+  {
+   type:
+   "text/plain;charset=utf-8"
+  }
+ );
+
+
+ const url=
+ URL.createObjectURL(blob);
+
+
+ const a=
+ document.createElement("a");
+
+
+ a.href=url;
+
+ a.download=
+ "GOROYO-Rapport-Mensuel.txt";
+
+
+ a.click();
+
+
+ URL.revokeObjectURL(url);
+
 }
+
+
+/* ================================
+   SESSION
+================================ */
+
+sb.auth
+.getSession()
+.then(({data})=>{
+
+ if(data.session){
+
+  showApp();
+
+ }
+
+});
+
 </script>
+
 </body>
 </html>
