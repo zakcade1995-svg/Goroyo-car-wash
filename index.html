@@ -1522,7 +1522,25 @@ Téléphone: 77 02 05 49`;
  URL.revokeObjectURL(url);
 
 }
+$("loginBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
 
+  $("msg").textContent = "Connexion...";
+
+  const { data, error } = await sb.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    $("msg").textContent = "Erreur: " + error.message;
+    return;
+  }
+
+  $("msg").textContent = "";
+  await showApp();
+};
 
 /* ================================
    SESSION
