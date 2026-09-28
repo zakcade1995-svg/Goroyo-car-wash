@@ -878,7 +878,7 @@ async function saveWash(){
   Math.max(
    0,
    Number(currentSubscription.remaining_washes)-1
-  );
+  )- 1 );
 
 
   const {error:updateError}=await sb
