@@ -1528,7 +1528,11 @@ Téléphone: 77 02 05 49`;
  URL.revokeObjectURL(url);
 
 }
-$("loginBtn").onclick = async () => {
+async function showApp() {
+  $("loginBox").style.display = "none";
+  $("app").style.display = "block";
+}
+  $("loginBtn").onclick = async () => {
   const email = $("email").value.trim();
   const password = $("password").value;
 
